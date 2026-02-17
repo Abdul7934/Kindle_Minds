@@ -37,5 +37,25 @@ public class DataSeeder implements CommandLineRunner {
         userRepository.save(admin);
 
         System.out.println("Admin user ready: admin@kindleminds.com / admin123");
+
+        // Seed Parent User
+        User parent = userRepository.findByEmail("parent@kindleminds.com").orElse(null);
+
+        if (parent == null) {
+            parent = new User();
+            parent.setName("Parent User");
+            parent.setEmail("parent@kindleminds.com");
+            parent.setRole(User.Role.PARENT);
+            parent.setPhone("9876543210");
+            parent.setActive(true);
+            System.out.println("Creating new Parent user...");
+        } else {
+            System.out.println("Updating existing Parent user...");
+        }
+
+        parent.setPassword(passwordEncoder.encode("parent123"));
+        userRepository.save(parent);
+
+        System.out.println("Parent user ready: parent@kindleminds.com / parent123");
     }
 }
