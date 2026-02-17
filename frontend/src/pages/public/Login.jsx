@@ -6,26 +6,47 @@ import { motion } from 'framer-motion';
 import { AuthContext } from '../../context/AuthContext';
 
 export const Login = () => {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
+    const [formData, setFormData] = useState({
+        email: '',
+        password: ''
+    });
     const { login } = useContext(AuthContext);
     const navigate = useNavigate();
     const [error, setError] = useState('');
+    const [loading, setLoading] = useState(false);
+
+    const handleChange = (e) => {
+        setFormData({ ...formData, [e.target.name]: e.target.value });
+        setError(''); // Clear error when user types
+    };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        setError('');
+        setError(''); // Clear error before submission
+        setLoading(true);
+
         try {
-            const userData = await login(email, password);
-            if (userData.role === 'ADMIN') {
-                setError('Admins must use the Admin Portal.');
-                // Optionally logout immediately to clear state if AuthContext sets it
-                return;
+            await login(formData.email, formData.password);
+
+            // Check user role from localStorage after login
+            const userData = JSON.parse(localStorage.getItem('user'));
+            if (userData && userData.role === 'ADMIN') {
+                navigate('/admin-portal');
             } else {
-                navigate('/parent/dashboard');
+                navigate('/dashboard');
             }
         } catch (err) {
-            setError('Invalid credentials. Please try again.');
+            console.error('Login error:', err);
+            // Handle different types of errors
+            if (err.response && err.response.status === 401) {
+                setError('Invalid email or password. Please try again.');
+            } else if (err.response && err.response.status === 404) {
+                setError('Server not found. Please check your connection.');
+            } else {
+                setError('Login failed. Please check your credentials and try again.');
+            }
+        } finally {
+            setLoading(false);
         }
     };
 
