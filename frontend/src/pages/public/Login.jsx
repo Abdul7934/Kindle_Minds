@@ -31,8 +31,10 @@ export const Login = () => {
             // Check user role from localStorage after login
             const userData = JSON.parse(localStorage.getItem('user'));
             if (userData && userData.role === 'ADMIN') {
+                console.log('Redirecting to Admin Portal');
                 navigate('/admin-portal');
             } else {
+                console.log('Redirecting to Parent Dashboard');
                 navigate('/parent/dashboard');
             }
         } catch (err) {
@@ -78,8 +80,8 @@ export const Login = () => {
                                     required
                                     className="appearance-none rounded-xl relative block w-full px-3 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-sunshine focus:border-sunshine focus:z-10 sm:text-sm"
                                     placeholder="Email address"
-                                    value={email}
-                                    onChange={(e) => setEmail(e.target.value)}
+                                    value={formData.email}
+                                    onChange={handleChange}
                                 />
                             </div>
                             <div>
@@ -92,8 +94,8 @@ export const Login = () => {
                                     required
                                     className="appearance-none rounded-xl relative block w-full px-3 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-sunshine focus:border-sunshine focus:z-10 sm:text-sm"
                                     placeholder="Password"
-                                    value={password}
-                                    onChange={(e) => setPassword(e.target.value)}
+                                    value={formData.password}
+                                    onChange={handleChange}
                                 />
                             </div>
                         </div>
