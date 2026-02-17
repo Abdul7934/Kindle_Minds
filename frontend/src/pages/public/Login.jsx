@@ -33,7 +33,7 @@ export const Login = () => {
             if (userData && userData.role === 'ADMIN') {
                 navigate('/admin-portal');
             } else {
-                navigate('/dashboard');
+                navigate('/parent/dashboard');
             }
         } catch (err) {
             console.error('Login error:', err);

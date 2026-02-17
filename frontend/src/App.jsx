@@ -41,6 +41,9 @@ function App() {
           <Route path="/admin-portal" element={<AdminLogin />} />
           <Route path="/admin/dashboard" element={<AdminDashboard />} />
           <Route path="/parent/dashboard" element={<ParentDashboard />} />
+
+          {/* Catch all - Redirect to Home */}
+          <Route path="*" element={<Home />} />
         </Routes>
       </Router>
     </AuthProvider>
